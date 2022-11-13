@@ -1,5 +1,9 @@
-ORG 0
+ORG 0x7c00
 BITS 16
+
+;below will caluclate us offset of that segments
+CODE_SEG equ gdt_code - gdt_start
+DATA_SEG equ gdt_data - gdt_start
 
 _start:
     jmp short start
@@ -8,58 +12,66 @@ _start:
 times 33 db 0 ; creating 33 extra bytes because BIOS parameter block sometimes overwrites this
 
 start:
-    jmp 0x7c0:step2  ; changing our code segment to desired address
+    jmp 0:step2  ; changing our code segment to desired address
 
 step2:
     cli ; clear Interrupts flag (disable), when clearing the segments we don't want to trigger an interrupt
-    mov ax, 0x7c0 ; we can not move directly values to ds and es
+    mov ax, 0 ; we can not move directly values to ds and es
     mov ds, ax
     mov es, ax ; init the extra segment 
-    mov ax, 0x00 ; set all the segments  ds,es,ss and stack pointer
     mov ss, ax
     mov sp, 0x7c00
     sti ; Enables Interrupts again, all segments set
 
-    mov ah, 2 ; READ SECTOR COMMAND
-    mov al, 1 ; ONE SECTOR TO READ
-    mov ch, 0 ; Cylinder low eight bits
-    mov cl, 2 ; Read sector two
-    mov dh, 0 ; Head Number
-    mov bx, buffer
-    int 0x13
+.load_protected:
+    cli
+    lgdt[gdt_descriptor]
+    mov eax, cr0
+    or eax, 0x1
+    mov cr0, eax
+    jmp CODE_SEG:load32 ;switches to code seg and jumps to load32
 
-    jc error; if the carry flag set jump to the error
-    mov si, buffer
-    call print
+; GDT general descriptor table
+gdt_start:
+gdt_null:
+    dd 0x0
+    dd 0x0
 
-    jmp $ ;infinite loop to display char by char , 1.h 2. e 3.l 4.l 5.o ...
+; offset 0x8
+gdt_code: ;CS should point to this
+    dw 0xffff   ; Segment limit first 0-15 bits
+    dw 0        ; Base first 0-15 bits
+    db 0        ; Base 16-23 bits
+    db 0x9a     ; Acess bytes
+    db 11001111b; High 4 bit flags and the low 4 bit flags
+    db 0        ; Base 24-31 bits
 
-error:
-    mov si, error_message
-    call print
+; offset 0x10
+gdt_data: ; DS, SS, ES, FS, GS
+    dw 0xffff   ; Segment limit first 0-15 bits
+    dw 0        ; Base first 0-15 bits
+    db 0        ; Base 16-23 bits
+    db 0x92     ; Acess bytes
+    db 11001111b; High 4 bit flags and the low 4 bit flags
+    db 0        ; Base 24-31 bits
+
+gdt_end:
+
+gdt_descriptor:
+    dw gdt_end - gdt_start - 1
+    dd gdt_start
+
+[BITS 32]
+load32:
+    mov ax, DATA_SEG
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov ss, ax
+    mov ebp, 0x00200000
+    mov esp, ebp
     jmp $
-
-print:
-    mov bx, 0 ; color 
-
-.loop: 
-    lodsb ;load chars from our address
-    cmp al,0 ; null terminator
-    je .done
-    call print_char ; output char to the screen
-    jmp .loop  ;display all the charachters
-
-.done:    
-    ret
-
-print_char:
-    mov ah, 0eh ;comamnd for writing in teletype mode
-    int 0x10 ;interrupt code - check interrupt jump table
-    ret
-
-error_message: db 'Failed to load sector', 0
 
 times 510- ($ - $$) db 0 ; fill 510 bytes of data with 0, pad the rest with zeros
 dw 0xAA55 ;execute our signature, remember little endianess 55AA, dw - double word
-
-buffer: ; we reference this only by label, because the bios has loaded only 1 sector

@@ -30,6 +30,7 @@ step2:
     or eax, 0x1
     mov cr0, eax
     jmp CODE_SEG:load32 ;switches to code seg and jumps to load32
+    
 
 ; GDT general descriptor table
 gdt_start:
@@ -63,15 +64,22 @@ gdt_descriptor:
 
 [BITS 32]
 load32:
-    mov ax, DATA_SEG
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    mov ss, ax
-    mov ebp, 0x00200000
-    mov esp, ebp
-    jmp $
+    mov eax, 1 ;starting sector to load from , 0 -boot sector, 1-kernel...
+    mov ecx, 100 ; total number of sectors to load
+    mov edi, 0x0100000 ; address to load them into  
+    call ata_lba_read 
 
 times 510- ($ - $$) db 0 ; fill 510 bytes of data with 0, pad the rest with zeros
 dw 0xAA55 ;execute our signature, remember little endianess 55AA, dw - double word
+
+
+
+
+
+
+
+
+
+
+
+

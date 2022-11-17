@@ -1,7 +1,7 @@
 #include "kernel.h"
 #include <stddef.h>
 #include <stdint.h>
-
+#include "idt/idt.h"
 
 uint16_t* video_mem = 0;
 uint16_t terminal_row = 0;
@@ -81,5 +81,7 @@ void print(const char* str)
 void kernel_main()
 {
     terminal_initialize(); // init the terminal
-    print("Hello world");
+    print("Hello world\n Hello");
+    
+    idt_init(); // init the global descriptor table
 }

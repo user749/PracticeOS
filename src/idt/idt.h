@@ -18,7 +18,7 @@ struct idtr_desc
     uint16_t limit; // size of descirptor table - 1
     uint32_t base; // Base address of the start of the interrupt desciptor table
 
-}__attribute__((packed));
+} __attribute__((packed));
 
 void idt_init();
 

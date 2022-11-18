@@ -21,7 +21,21 @@ _start:
     in al, 0x92
     or al,2
     out 0x92, al
-    
+
+    ; Remap the master PIC - programmable interrupt controller, from 0-15 remap to 0x20 0x21
+    mov al, 00010001b ;initilize
+    out 0x20, al ; Tell master 
+
+    mov al, 0x20 ; Interrupt 0x20 is where master ISR should start - remapping 0-15 to start from 0x20
+    out 0x21, al ; Tell master
+
+    mov al, 000000001b  ;first interrupt will be mapped by calling 0x21, then 2 3 4 ....
+    out 0x21, al ;tell master
+    ; End remap of the master PIC
+
+    ;enable the interrupts because when the PIC generates interrupts they would be ignored by the CPU, so we must enable it
+    sti
+
     call kernel_main
     
     jmp $

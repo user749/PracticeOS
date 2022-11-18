@@ -78,10 +78,12 @@ void print(const char* str)
     }    
 }
 
+extern void outb(unsigned short, unsigned char);
 void kernel_main()
 {
     terminal_initialize(); // init the terminal
     print("Hello world\n Hello");
     
     idt_init(); // init the global descriptor table
+
 }

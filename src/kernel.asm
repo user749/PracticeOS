@@ -34,7 +34,7 @@ _start:
     ; End remap of the master PIC
 
     ;enable the interrupts because when the PIC generates interrupts they would be ignored by the CPU, so we must enable it
-    sti
+    
 
     call kernel_main
     

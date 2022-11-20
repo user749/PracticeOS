@@ -89,13 +89,16 @@ void kernel_main()
         
     idt_init(); // init the global descriptor table
 
+    //enable the system interrupts
+    enable_interrupts(); 
+
     void* ptr = kmalloc(50);
     void* ptr2 = kmalloc(5000);
     void* ptr3 = kmalloc(5600);
 
     kfree(ptr);
     void* ptr4 = kmalloc(50);
-    if (ptr || ptr2 || ptr3 || ptr4)
+    if (ptr || ptr2 || ptr3 || ptr4 )
     {
         /* code */
      }

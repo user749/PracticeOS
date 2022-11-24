@@ -4,6 +4,7 @@
 #include "idt/idt.h"
 #include "memory/heap/kheap.h"
 #include "memory/paging/paging.h"
+#include "disk/disk.h"
 
 uint16_t* video_mem = 0;
 uint16_t terminal_row = 0;
@@ -83,12 +84,15 @@ void print(const char* str)
 static struct paging_4gb_chunk* kernel_chunk = 0;
 void kernel_main()
 {
-    terminal_initialize(); // init the terminal
+    // init the terminal
+    terminal_initialize(); 
     print("Hello world\n Hello");
     
-    kheap_init(); //initialize heap
+    //initialize heap
+    kheap_init(); 
         
-    idt_init(); // init the global descriptor table
+    // init the global descriptor table    
+    idt_init(); 
 
     //setup paging
     kernel_chunk = paging_new_4gb(PAGING_IS_WRITEABLE | PAGING_IS_PRESENT | PAGING_ACCESS_FROM_ALL);
@@ -96,17 +100,14 @@ void kernel_main()
     //Switch to kernel paging chunk
     paging_switch(paging_4gb_chunk_get_directory(kernel_chunk));
 
-    char* ptr = kzalloc(4096);   
-    paging_set(paging_4gb_chunk_get_directory(kernel_chunk), (void*)0x1000, (uint32_t)ptr | PAGING_ACCESS_FROM_ALL | PAGING_IS_PRESENT |PAGING_IS_WRITEABLE);
-
-    char* ptr2 = (char*) 0x1000;
-    ptr2[0] = 'A';
-    ptr2[1] = 'B';
-    print(ptr2); 
-
     //enable paging
     enable_paging();
 
-    enable_interrupts(); //enable the system interrupts
+    char buf[512];
+    disk_read_sector(0, 1, buf);
+
+
+    //enable the system interrupts
+    enable_interrupts(); 
         
 }

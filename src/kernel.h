@@ -5,6 +5,7 @@
 #define VGA_WIDTH 80
 #define VGA_HEIGTH 20
 
+#define PRACTICEOS_MAX_PATH 108
 void kernel_main();
 void print(const char* str);
 

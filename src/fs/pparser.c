@@ -8,7 +8,7 @@
 static int pathparser_path_valid_format(const char* filename)
 {
     int len = strnlen(filename, PRACTICEOS_MAX_PATH);
-    return (len >= 3 && isdigit(filename[0]) && memcmp((void*)&filename[1], "/:", 2) == 0);
+    return (len >= 3 && isdigit(filename[0]) && memcmp((void*)&filename[1], ":/", 2) == 0);
 }
 
 static int pathparser_get_drive_by_path(const char** path)

@@ -1,6 +1,8 @@
 #ifndef DISK_H
 #define DISK_H
 
+#include "fs/file.h"
+
 typedef unsigned int PRACTICEOS_DISK_TYPE;
 
 //represents a realy physical hard disk
@@ -11,7 +13,9 @@ struct disk
 {
     PRACTICEOS_DISK_TYPE type;
     int sector_size;
-    
+
+
+    struct filesystem* filesystem;    
 };
 
 void disk_search_and_init();

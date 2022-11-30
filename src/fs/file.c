@@ -2,6 +2,7 @@
 #include "config.h"
 #include "memory/memory.h"
 #include "status.h"
+#include "fat/fat16.h"
 #include "memory/heap/kheap.h"
 #include "kernel.h"
 
@@ -37,8 +38,7 @@ void fs_insert_filesystem(struct filesystem* filesystem)
 
 static void fs_static_load()
 {
-   // fs_insert_filesystem(fat16_init());
-    
+   fs_insert_filesystem(fat16_init());    
 
 }
 
@@ -95,7 +95,7 @@ struct filesystem* fs_resolve(struct disk* disk)
     {
         if (filesystems[i] != 0 && filesystems[i]->resolve(disk) == 0)
         {
-            fs = filesystems[i];
+             fs = filesystems[i];
             break;
         }
     }

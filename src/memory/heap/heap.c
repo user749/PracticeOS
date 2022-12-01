@@ -64,7 +64,7 @@ static uint32_t heap_align_value_to_upper(uint32_t val)
     return val;
 }
 
-// get the lower 4 bits of a byte
+// get the lower 4 bits of a byte 
 static int heap_get_entry_type(HEAP_BLOCK_TABLE_ENTRY entry)
 {
     return entry & 0x0f;
@@ -148,7 +148,7 @@ void* heap_malloc_blocks(struct heap* heap, uint32_t total_blocks)
     
     address = heap_block_to_address(heap, start_block);
     
-    // Mark the blocks as thaken
+    // Mark the blocks as taken
     heap_mark_blocks_taken(heap, start_block, total_blocks);
 
 out:

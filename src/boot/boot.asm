@@ -12,7 +12,7 @@ DATA_SEG equ gdt_data - gdt_start
 ;  FAT16 Header
 OEMIdentifier               db 'PRACTOS '
 BytesPerSector              dw  0x200
-SectorsPerCluster           dw  0x80
+SectorsPerCluster           db  0x80
 ReservedSectors             dw  200
 FATCopies                   db  0x02
 RootDirEntries              dw  0x40
@@ -29,8 +29,8 @@ DriveNumber                 db 0x80
 WinNTBit                    db 0x00
 Signature                   db 0x29
 VolumeID                    dd 0xD105
-VolumeIDString              db 'PRACTOS BOOT'
-
+VolumeIDString              db 'PRACTOS BOO'
+SystemIDString              db 'FAT16   '
 
 start:
     jmp 0:step2  ; changing our code segment to desired address

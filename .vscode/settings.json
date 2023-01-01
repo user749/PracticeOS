@@ -1,6 +1,7 @@
 {
     "files.associations": {
-        "stddef.h": "c"
+        "stddef.h": "c",
+        "status.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

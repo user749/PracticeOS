@@ -84,7 +84,7 @@ void kernel_main()
     //initialize heap
     kheap_init(); 
 
-    //init the file system
+    //init the filesystems
     fs_init();
 
     //Search and init the disks
@@ -105,7 +105,14 @@ void kernel_main()
     //enable the system interrupts
     enable_interrupts(); 
 
- 
+    int fd = fopen("0:/hello.txt", "r");
+    if (fd)
+    {
+        print("We opened2 hello.txt\n");
+    }
+    else 
+        print("There was an error opening requested file");
+      
     while (1)
     {
         /* code */

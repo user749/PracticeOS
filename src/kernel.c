@@ -109,6 +109,9 @@ void kernel_main()
     if (fd)
     {
         print("We opened2 hello.txt\n");
+        char buf[6];
+        fread(buf, 6, 1, fd);
+        print(buf);
     }
     else 
         print("There was an error opening requested file");

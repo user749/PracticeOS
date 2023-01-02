@@ -109,9 +109,11 @@ void kernel_main()
     if (fd)
     {
         print("We opened2 hello.txt\n");
-        char buf[6];
-        fread(buf, 6, 1, fd);
-        print(buf);
+        char buf[14];
+        fseek(fd, 2, SEEK_SET);
+        fread(buf, 11, 1, fd);
+        buf[13] = 0x00;
+        print(buf);  
     }
     else 
         print("There was an error opening requested file");

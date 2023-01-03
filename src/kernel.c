@@ -110,6 +110,9 @@ void kernel_main()
     {
         struct file_stat s;
         fstat(fd, &s);
+        fclose(fd);
+    
+        print("\ntesting\n");
     }
     else 
         print("There was an error opening requested file");

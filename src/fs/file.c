@@ -227,7 +227,6 @@ int fclose(int fd)
     {
         file_free_descriptor(desc);
     }
-    
 
 out: 
     return res;

@@ -29,11 +29,11 @@ void paging_switch(uint32_t* directory);
 //function to enable paging
 void enable_paging();
 
-//get the table directory 
-uint32_t* paging_4gb_chunk_get_directory(struct paging_4gb_chunk* chunk);
-
 int paging_set(uint32_t* directory, void* virt, uint32_t val);
 bool paging_is_aligned(void* addr);
 
+//get the table directory 
+uint32_t* paging_4gb_chunk_get_directory(struct paging_4gb_chunk* chunk);
+void paging_free_4gb(struct paging_4gb_chunk* chunk);
 
 #endif

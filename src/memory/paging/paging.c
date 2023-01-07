@@ -14,7 +14,7 @@ struct paging_4gb_chunk* paging_new_4gb(uint8_t flags)
     for (int i = 0; i <  PAGING_TOTAL_ENTRIES_PER_TABLE; i++)
     {
         //for each table entry (1024), allocate 4096 pages
-        uint32_t* entry = kzalloc(sizeof(uint32_t) * PAGING_TOTAL_ENTRIES_PER_TABLE);
+        uint32_t* entry = kzalloc(sizeof(uint32_t)* PAGING_TOTAL_ENTRIES_PER_TABLE);
         for (int b = 0; b < PAGING_TOTAL_ENTRIES_PER_TABLE; b++)
         {
             entry[b] = (offset + (b * PAGING_PAGE_SIZE)) | flags;
@@ -43,7 +43,7 @@ void paging_free_4gb(struct paging_4gb_chunk* chunk)
         uint32_t* table = (uint32_t*)(entry & 0xfffff000);
         kfree(table);
     }
-    
+
     kfree(chunk->directory_entry);
     kfree(chunk);
 }
@@ -72,6 +72,41 @@ int paging_get_indexes(void* virtual_address, uint32_t* directory_index_out, uin
 out:
     return res;
 } 
+
+int paging_map_to(uint32_t* directory, void* virt, void* phys, void* phys_end, int flags)
+{
+    int res = 0;
+    if ((uint32_t)virt % PAGING_PAGE_SIZE)
+    {
+        res = -EINVARG;
+        goto out;
+    }
+    
+    if ((uint32_t)phys % PAGING_PAGE_SIZE)
+    {
+        res = -EINVARG;
+        goto out;
+    }
+    
+    if ((uint32_t)phys_end % PAGING_PAGE_SIZE)
+    {
+        res = -EINVARG;
+        goto out;
+    }
+    
+    if ((uint32_t)phys_end < (uint32_t)phys)
+    {
+        res = -EINVARG;
+        goto out;
+    }
+    
+    uint32_t total_bytes = phys_end - phys;
+    int total_pages = total_bytes / paging + PAGING_PAGE_SIZE;
+    res = paging_map_range(directory, virt, phys, total_pages, flags);
+
+out:
+    return res;
+}
 
 int paging_set(uint32_t* directory, void* virt, uint32_t val)
 {

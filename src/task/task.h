@@ -45,4 +45,11 @@ struct task* task_current();
 struct task* task_get_new();
 int task_free(struct task* task);
 
+int task_switch(struct task* task);
+int task_page();
+
+void task_return(struct registers* regs);
+void restore_general_purpose_registers(struct registers* regs);
+void user_registers();
+
 #endif

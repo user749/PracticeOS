@@ -3,10 +3,10 @@
 #include "memory/memory.h"
 #include "status.h"
 #include "task/task.h"
-#include "heap/kheap.h"
+#include "memory/heap/kheap.h"
 #include "fs/file.h"
 #include "string/string.h"
-#include "paging/paging.h"
+#include "memory/paging/paging.h"
 #include "kernel.h"
 
  // The current process that is running
@@ -25,11 +25,11 @@ struct process* process_current()
     return current_process;
 }
 
-int process_get(int process_id)
+struct process* process_get(int process_id)
 {
     if (process_id < 0 || process_id >= PRACTICEOS_MAX_PROCESESS)
     {
-        return -EINVARG;
+        return NULL;
     }
 
     return processes[process_id];
@@ -76,19 +76,49 @@ out:
 static int process_load_data(const char* filename, struct process* process)
 {
     int res = 0;
-    res = process_load_binay(filename, process);
+    res = process_load_binary(filename, process);
     return res;
 }
 
 int process_map_binary(struct process* process)
 {
     int res = 0;
-    paging_
+    paging_map_to(process->task->page_directory->directory_entry, (void*) PRACTICEOS_PROGRAM_VIRTUAL_ADDRESS, process->ptr, paging_align_address(process->ptr + process->size), PAGING_IS_PRESENT | PAGING_ACCESS_FROM_ALL | PAGING_IS_WRITEABLE);
+    return res;
 }
 int process_map_memory(struct process* process)
 {
     int res = 0;
     res = process_map_binary(process);
+    return res;
+}
+
+int process_get_free_slot()
+{
+    for (int i = 0; i < PRACTICEOS_MAX_PROCESESS; i++)
+    {
+        if (processes[i] == 0)
+        {
+            return i;
+        }
+    }
+    return -EISTKN;
+}
+
+int process_load(const char* filename, struct process** process)
+{
+    int res = 0;
+
+    int process_slot = process_get_free_slot();
+    if (process_slot < 0)
+    {
+        res = -EISTKN;
+        goto out;
+    }
+
+    res = process_load_for_slot(filename, process, process_slot);
+
+out:
     return res;
 }
 
@@ -139,7 +169,7 @@ int process_load_for_slot(const char* filename, struct process** process, int pr
     
     _process->task = task;
 
-    res = process_map_memory(process);
+    res = process_map_memory(_process);
     if (res < 0)
     {
         goto out;

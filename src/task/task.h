@@ -51,5 +51,6 @@ int task_page();
 void task_return(struct registers* regs);
 void restore_general_purpose_registers(struct registers* regs);
 void user_registers();
+void task_run_first_ever_task();
 
 #endif

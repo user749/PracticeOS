@@ -88,6 +88,11 @@ void panic(const char* msg)
     print(msg);
     while (1) { }
 }
+void kernel_page()
+{
+    
+
+}
 
 struct tss tss;
 struct gdt gdt_real[PRACTICEOS_TOTAL_GDT_SEGMENTS];

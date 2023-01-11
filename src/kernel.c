@@ -11,6 +11,7 @@
 #include "disk/streamer.h"
 #include "fs/file.h"
 #include "gdt/gdt.h"
+#include "isr80h/isr80h.h"
 #include "task/tss.h"
 #include "config.h"
 #include "task/task.h"
@@ -90,8 +91,8 @@ void panic(const char* msg)
 }
 void kernel_page()
 {
-    
-
+    kernel_registers();
+    paging_switch(kernel_chunk);
 }
 
 struct tss tss;
@@ -146,6 +147,11 @@ void kernel_main()
     //enable paging
     enable_paging();
 
+    //register commands
+    isr80h_register_commands();
+
+    
+
     struct process* process = 0;
     int res = process_load("0:/blank.bin", &process);
     if (res != PRACTICEOS_ALL_OK)
@@ -157,3 +163,17 @@ void kernel_main()
 
     while (1) {/* code */}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

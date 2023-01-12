@@ -18,6 +18,8 @@ extern void isr80h_wrapper();
 void int21h_handler()
 {
     print("Keyboard pressed\n");
+    outb(0x20, 0x20);
+
 }
 
 void no_interrupt_handler()

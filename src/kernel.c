@@ -150,8 +150,6 @@ void kernel_main()
     //register commands
     isr80h_register_commands();
 
-    
-
     struct process* process = 0;
     int res = process_load("0:/blank.bin", &process);
     if (res != PRACTICEOS_ALL_OK)
@@ -161,19 +159,5 @@ void kernel_main()
     
     task_run_first_ever_task();
 
-    while (1) {/* code */}
+    while (1) {/* code */}  
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

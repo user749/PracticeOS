@@ -32,6 +32,13 @@ struct process* process_get(int process_id)
     }
 
     return processes[process_id];
+ }
+
+int process_switch(struct process* process)
+{
+    current_process = process;
+    
+    return 0;
 }
 
 static int process_load_binary(const char* filename, struct process* process)

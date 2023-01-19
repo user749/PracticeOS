@@ -36,6 +36,24 @@ void terminal_putchar(int x, int y, char c, char color)
     video_mem[( y * VGA_WIDTH ) + x] = terminal_make_char(c, color);  
 }
 
+void terminal_backspace()
+{
+    if (terminal_row == 0 && terminal_col == 0)
+    {
+        return;
+    }
+
+    if (terminal_col == 0)
+    {
+        terminal_row   -=           1;
+        terminal_col    =   VGA_WIDTH;
+    }
+    
+    terminal_col -= 1;
+    terminal_writechar(' ', 15);
+    terminal_col -= 1;
+}
+
 // write chars in the terminal in an organized fashion (keeps track of column and rows)
 void terminal_writechar(char c, char color)
 {
@@ -45,7 +63,15 @@ void terminal_writechar(char c, char color)
         terminal_col = 0;
         return; 
     }
+
+    if (c == 0x08)
+    {
+        terminal_backspace();
+        return;
+    }
     
+
+
     terminal_putchar(terminal_col, terminal_row, c, color);
     terminal_col += 1; //each time we call this function the column is incremented by one 'H-0 e-1 l-2 l-3 o-4" 
     

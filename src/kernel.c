@@ -154,14 +154,12 @@ void kernel_main()
     // init all the system keyboards
     keyboard_init();
 
-
     struct process* process = 0;
     int res = process_load_switch("0:/blank.bin", &process);
     if (res != PRACTICEOS_ALL_OK)
     {
         panic("Failed to load blank bin\n");
     }
-  
   
     task_run_first_ever_task();
 

@@ -73,6 +73,11 @@ struct elf32_shdr* elf_section(struct elf_header* header, int index)
     return &elf_sheader(header)[index];
 }
 
+void* elf_phdr_phys_address(struct elf_file* file, struct elf32_phdr* phdr)
+{
+    return elf_memory(file) + phdr->p_offset;
+}
+
 char* elf_str_table(struct elf_header* header)
 {
     return (char*) header + elf_section(header, header->e_shstrndx)->sh_offset;
@@ -182,7 +187,7 @@ int elf_load(const char* filename, struct elf_file** file_out)
     res = fstat(fd, &stat);
     if (res < 0)
     {
-        goto out;
+        goto  out;
     }
 
     elf_file->elf_memory = kzalloc(stat.filesize);

@@ -1,8 +1,13 @@
 #include "practiceos.h"
+#include "stdlib.h"
 
 int main(int argc, char** argv)
 {
     print("hello how are you!\n");
+
+    void* ptr = malloc(512);
+                                            
+
     while (1)
     {
         if (getkey() != 0)

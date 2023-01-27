@@ -1,5 +1,6 @@
-FILES=./build/start.o ./build/practiceos.o
-INCLUDES=
+FILES=./build/start.o ./build/practiceos.o ./build/stdlib.o
+INCLUDES=-I./src
+FLAGS= -g
 
 all: ${FILES}
 	i686-elf-ld -m elf_i386 -relocatable ${FILES} -o ./stdlib.elf
@@ -9,6 +10,9 @@ all: ${FILES}
 
 ./build/practiceos.o: ./src/practiceos.asm
 	nasm -f elf ./src/practiceos.asm -o ./build/practiceos.o
+
+./build/stdlib.o: ./src/stdlib.c
+	i686-elf-gcc ${INCLUDES} -I./${FLAGS} -std=gnu99 -c ./src/stdlib.c -o ./build/stdlib.o
 
 clean:
 	rm -rf ${FILES}

@@ -6,6 +6,11 @@ int main(int argc, char** argv)
     print("hello how are you!\n");
 
     void* ptr = malloc(512);
+    free(ptr);
+    if (ptr)
+    {
+        
+    }
                                             
 
     while (1)

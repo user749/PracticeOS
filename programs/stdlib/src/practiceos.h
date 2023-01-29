@@ -8,5 +8,6 @@ void print(const char* message);
 int getkey();
 
 void* practiceos_malloc(size_t size);
+void practiceos_free(void* ptr);
 
 #endif

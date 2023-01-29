@@ -9,6 +9,6 @@ void* malloc(size_t size)
 
 void free(void* ptr)
 {
-
+    practiceos_free(ptr);
 
 }

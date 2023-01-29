@@ -1,11 +1,14 @@
 #include "practiceos.h"
 #include "stdlib.h"
+#include "stdio.h"
 
 int main(int argc, char** argv)
 {
     print("hello how are you!\n");
 
     print(itoa(2332));
+
+    putchar('z');
 
     void* ptr = malloc(512);
     free(ptr);

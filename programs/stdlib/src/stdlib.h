@@ -1,5 +1,5 @@
-#ifndef STDLIB_H
-#define STDLIB_H
+#ifndef PRACTICEOS_STDLIB_H
+#define PRACTICEOS_STDLIB_H
 
 #include <stddef.h>
 

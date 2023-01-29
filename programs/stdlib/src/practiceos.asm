@@ -6,6 +6,7 @@ global print:function
 global getkey:function
 global practiceos_malloc:function
 global practiceos_free:function
+global practiceos_putchar:function
 
 ; void print(const char* message)
 print:
@@ -26,6 +27,17 @@ getkey:
     mov ebp, esp
     mov eax, 2 ; command getkey
     int 0x80
+    pop ebp
+    ret
+
+; void practiceos_putchar(char c)
+practiceos_putchar:
+    push ebp
+    mov ebp, esp
+    mov eax, 3 ; command put char
+    push dword[ebp + 8] ; our c variable 
+    int 0x80
+    add esp, 4
     pop ebp
     ret
 

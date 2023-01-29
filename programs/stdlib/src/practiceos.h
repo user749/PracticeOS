@@ -9,5 +9,6 @@ int getkey();
 
 void* practiceos_malloc(size_t size);
 void practiceos_free(void* ptr);
+void practiceos_putchar(char c);
 
 #endif

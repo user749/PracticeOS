@@ -5,6 +5,8 @@ int main(int argc, char** argv)
 {
     print("hello how are you!\n");
 
+    print(itoa(2332));
+
     void* ptr = malloc(512);
     free(ptr);
     if (ptr)

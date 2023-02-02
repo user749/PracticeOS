@@ -3,7 +3,7 @@
 section .asm
 
 global print:function
-global getkey:function
+global practiceos_getkey:function
 global practiceos_malloc:function
 global practiceos_free:function
 global practiceos_putchar:function
@@ -21,8 +21,8 @@ print:
     ret
 
 
-; int getkey()
-getkey:
+; int practiceos_getkey()
+practiceos_getkey:
     push ebp
     mov ebp, esp
     mov eax, 2 ; command getkey

@@ -1,4 +1,4 @@
-FILES=./build/start.o ./build/practiceos.o ./build/stdlib.o ./build/stdio.o
+FILES=./build/start.o ./build/practiceos.asm.o ./build/stdlib.o ./build/stdio.o ./build/practiceos.o
 INCLUDES=-I./src
 FLAGS= -g -falign-jumps -falign-functions -falign-labels -falign-loops -fstrength-reduce -fomit-frame-pointer -finline-functions -Wno-unused-function -fno-builtin -Werror -Wno-unused-label -Wno-cpp -Wno-unused-parameter -nostdlib -nostartfiles -nodefaultlibs -Wall -O0 -Iinc
 
@@ -8,8 +8,11 @@ all: ${FILES}
 ./build/start.o: ./src/start.asm
 	nasm -f elf ./src/start.asm -o ./build/start.o
 
-./build/practiceos.o: ./src/practiceos.asm
-	nasm -f elf ./src/practiceos.asm -o ./build/practiceos.o
+./build/practiceos.asm.o: ./src/practiceos.asm
+	nasm -f elf ./src/practiceos.asm -o ./build/practiceos.asm.o
+
+./build/practiceos.o: ./src/practiceos.c
+	i686-elf-gcc ${INCLUDES} ${FLAGS} -std=gnu99 -c ./src/practiceos.c -o ./build/practiceos.o
 
 ./build/stdlib.o: ./src/stdlib.c
 	i686-elf-gcc ${INCLUDES} ${FLAGS} -std=gnu99 -c ./src/stdlib.c -o ./build/stdlib.o

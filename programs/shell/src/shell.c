@@ -12,10 +12,8 @@ int main(int argc, char** argv)
         printf("> ");
         char buf[1024];
         practiceos_terminal_readline(buf, sizeof(buf), true);
-        print("\n");
-            
+        practiceos_process_load_start(buf);    
+        print("\n");    
     }
-
     return 0;
-    
 }

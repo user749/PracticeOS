@@ -5,14 +5,12 @@
 
 int main(int argc, char** argv)
 {
-    char* ptr = malloc(20);
-    strcpy(ptr, "hello world");
-    print(ptr);
-    free(ptr);
+    char str[] = "Hello world";
+    struct command_argument* root_command =  practiceos_parse_command(str, sizeof(str));
 
-    ptr[0] = '0';
-    print("abc \n");
-
+    printf("%s\n", root_command->argument);
+    printf("%s\n", root_command->next->argument);
+    
     while (1)
     {
     }

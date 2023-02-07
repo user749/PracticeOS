@@ -7,7 +7,8 @@ global practiceos_getkey:function
 global practiceos_malloc:function
 global practiceos_free:function
 global practiceos_putchar:function
-global practiceos_process_load_start
+global practiceos_process_load_start:function
+global practiceos_process_get_arguments:function
 
 ; void print(const char* message)
 print:
@@ -71,6 +72,17 @@ practiceos_process_load_start:
     mov ebp, esp
     mov eax, 6 ; cmnd 6 process load start - start a process
     push dword[ebp + 8] ; filename
+    int 0x80
+    add esp, 4
+    pop ebp
+    ret
+
+; void practiceos_process_get_arguments(struct process_arguments* arguments)
+practiceos_process_get_arguments:
+    push ebp
+    mov ebp, esp
+    mov eax, 8 ; command 8
+    push dword[ebp+8] ; variable arguments
     int 0x80
     add esp, 4
     pop ebp

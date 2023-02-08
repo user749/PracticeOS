@@ -26,8 +26,9 @@ void    practiceos_putchar(char c);
 int     practiceos_getkeyblock();
 void    practiceos_terminal_readline(char* out, int max, bool output_while_typing);
 void    practiceos_process_load_start(const char* filename);
-struct command_argument* practiceos_parse_command(const char* command, int max);
-void practiceos_process_get_arguments(struct process_arguments* arguments);
-
+struct  command_argument* practiceos_parse_command(const char* command, int max);
+void    practiceos_process_get_arguments(struct process_arguments* arguments);
+int     practiceos_system(struct command_argument* arguments);
+int     practiceos_system_run(const char* command);
 
 #endif

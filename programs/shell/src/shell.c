@@ -9,10 +9,12 @@ int main(int argc, char** argv)
 
     while (1)
     {
-        printf("> ");
+        print("> ");
         char buf[1024];
         practiceos_terminal_readline(buf, sizeof(buf), true);
-        practiceos_process_load_start(buf);    
+        print("\n");
+        practiceos_system_run(buf);
+        
         print("\n");    
     }
     return 0;

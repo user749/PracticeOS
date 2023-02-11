@@ -212,6 +212,8 @@ int process_terminate(struct process* process)
     task_free(process->task);
 
     process_unlink(process);
+
+    print("Process was terminated\n");
 out:
     return res;
 }

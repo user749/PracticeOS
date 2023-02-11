@@ -5,6 +5,7 @@
 #include "io/io.h"
 #include "task/task.h"
 #include "status.h"
+#include "task/process.h"
 
 struct idt_desc idt_descriptors[PRACTICEOS_TOTAL_INTERRUPTS];
 struct idtr_desc idtr_descriptor;
@@ -54,6 +55,12 @@ void idt_set(int interrupt_na, void* address)
     desc->offset_2 = (uint32_t) address >> 16;
 }
 
+void idt_handle_exception()
+{
+    process_terminate(task_current()->process);
+    task_next();
+}
+
 //initializing the idt
 void idt_init()
 {
@@ -64,13 +71,19 @@ void idt_init()
     for(int i = 0; i < PRACTICEOS_TOTAL_INTERRUPTS; i++)
     {
         idt_set(i, interrupt_pointer_table[i]);
-
+        
     }
 
     //setting the zero interrupt
     idt_set(0, idt_zero);
 
     idt_set(0x80, isr80h_wrapper);
+
+    for (int i = 0; i < 0x20; i++)
+    {
+        idt_register_interrupt_callback(i, idt_handle_exception);
+    }
+    
 
     // load the interrupt descriptor table
     idt_load(&idtr_descriptor);
